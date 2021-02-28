@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  {{ .Values.mediawiki.name }}
+  labels:
+    app: {{ .Values.mediawiki.name}}
+spec:
+  replicas: {{ .Values.mediawiki.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.mediawiki.name}}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.mediawiki.name}}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.mediawiki.image }}:{{ .Values.mediawiki.tag | default .Chart.AppVersion }}"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP

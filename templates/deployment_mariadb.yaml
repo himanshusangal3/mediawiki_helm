@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.mediawikidb.name }}
+  labels:
+    db: {{ .Values.mediawikidb.name}}
+spec:
+  replicas: {{ .Values.mediawikidb.replicaCount }}
+  selector:
+    matchLabels:
+      db: {{ .Values.mediawikidb.name}}
+  template:
+    metadata:
+      labels:
+        db: {{ .Values.mediawikidb.name}}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+       {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ .Values.mediawikidb.image }}:{{ .Values.mediawikidb.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: MYSQL_DBNAME
+              value: {{ .Values.mediawikidb.env.MYSQL_DBNAME }}
+            - name: MYSQL_USERNAME
+              value: {{ .Values.mediawikidb.env.MYSQL_USERNAME }}
+            - name: MYSQL_PASSWORD
+              value: {{ .Values.mediawikidb.env.MYSQL_PASSWORD }}
+          ports:
+            - containerPort: {{ .Values.mediawikidb.service.port }}

@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
-
+fullname: mediawiki-app
 image:
   repository: himanshusangal3/mediawiki
   pullPolicy: IfNotPresent
@@ -77,3 +77,29 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+mediawiki:
+  name: mediawiki-app
+  image: himanshusangal3/mediawiki
+  tag: "1.0"
+  replicaCount: 1
+  pullPolicy: IfNotPresent
+  service:
+    type: NodePort
+    port: 8080
+    nodePort: 30115
+
+mediawikidb:
+  name: mediawiki-db
+  image: himanshusangal3/mariadb
+  tag: "2.0"
+  pullPolicy: IfNotPresent
+  replicaCount: 1
+  service:
+    type: ClusterIP
+    port: 3306
+    targetPort: 3306    
+  env:
+    MYSQL_DBNAME: my_wiki
+    MYSQL_USERNAME: wikiuser
+    MYSQL_PASSWORD: example

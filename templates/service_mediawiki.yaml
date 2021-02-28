@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.mediawiki.name }}
+  labels:
+    app: {{ .Values.mediawiki.name}}
+spec:
+  type: {{ .Values.mediawiki.service.type }}
+  ports:
+    - port: {{ .Values.mediawiki.service.port }}
+      protocol: TCP
+      name: http
+      nodePort: {{ .Values.mediawiki.service.nodePort }}
+  selector:
+    app: {{ .Values.mediawiki.name}}
