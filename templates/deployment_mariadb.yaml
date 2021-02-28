@@ -14,14 +14,10 @@ spec:
       labels:
         db: {{ .Values.mediawikidb.name}}
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-       {{- toYaml . | nindent 8 }}
-      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: {{ .Values.mediawikidb.image }}:{{ .Values.mediawikidb.tag }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.mediawikidb.pullPolicy }}
           env:
             - name: MYSQL_DBNAME
               value: {{ .Values.mediawikidb.env.MYSQL_DBNAME }}
